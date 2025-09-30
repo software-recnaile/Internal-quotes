@@ -5,3 +5,4 @@ trimesh
 python-multipart
 cadquery
 pytransform3d
+requests
