@@ -14,7 +14,7 @@ from trimesh.geometry import align_vectors
 from Backend.process_model import router
 import threading
 import time
-import requests 
+import requests
 
 app = FastAPI()
 
@@ -157,5 +157,6 @@ async def auto_orient(files: List[UploadFile] = File(...)):
         })
 
     return results
+
 
 
