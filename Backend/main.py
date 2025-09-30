@@ -46,7 +46,7 @@ app.include_router(router)
 def keep_alive():
     while True:
         try:
-            requests.get("https://threede-backend-1.onrender.com")
+            requests.get("https://internal-quotes-backend.onrender.com")
         except:
             pass
         time.sleep(40)
@@ -157,6 +157,7 @@ async def auto_orient(files: List[UploadFile] = File(...)):
         })
 
     return results
+
 
 
 
