@@ -322,7 +322,7 @@ const FileUpload = ({
     try {
       // Upload with real-time progress
       const autoOrientRes = await uploadWithProgress(
-        "https://threedmodelbackend-mfog.onrender.com/auto-orient/",
+        "http://localhost:8000/auto-orient/",
         formData1,
         (percent) => setProgress(percent)
       );
@@ -334,7 +334,7 @@ const FileUpload = ({
       setProgress(100);
       setStatusLabel("Processing...");
 
-      const ccRes = await fetch("https://threedmodelbackend-mfog.onrender.com/upload-multiple-stl/", {
+      const ccRes = await fetch("http://localhost:8000/upload-multiple-stl/", {
         method: "POST",
         body: formData2,
       });
@@ -347,26 +347,26 @@ const FileUpload = ({
       const ccData = await ccRes.json();
 
       const merged = files.map((file) => {
-        const orient = autoOrientRes.find((item) => item.filename === file.name);
-        const cc = ccData.processed.find((item) => item.filename === file.name);
-        return {
-          file,
-          fileName: file.name,
-          dimensions: orient
-            ? {
-                dimensions_before: orient.dimensions_before,
-                dimensions_after: orient.dimensions_after,
-              }
-            : null,
-          volume_cc: cc ? cc.volume_cc : null,
-          viewOrientation: "before",
-          multiplier: "",
-          multipliedWeight: null,
-          error: orient?.error || cc?.error || null,
-          geometry: null,
-          quantity: 1,
-        };
-      });
+  const orient = autoOrientRes.find((item) => item.filename === file.name);
+  const cc = ccData.processed.find((item) => item.filename === file.name);
+  return {
+    file,
+    fileName: file.name,
+    dimensions: orient
+      ? {
+          dimensions_before: orient.dimensions_before,
+          dimensions_after: orient.dimensions_after,
+        }
+      : null,
+    volume_cc: cc ? cc.volume_cm3 : null, // ✅ Use volume_cm3 from backend
+    viewOrientation: "before",
+    multiplier: "",
+    multipliedWeight: null,
+    error: orient?.error || cc?.error || null,
+    geometry: null,
+    quantity: 1,
+  };
+});
 
       setFileStates(merged);
       setSelectedIndex(0);
@@ -541,17 +541,17 @@ const FileUpload = ({
                     <h4 className="font-medium">
                       {fileState.viewOrientation === "before" ? "Before" : "After"} Orientation:
                     </h4>
-                    <p>X: {dims.x.toFixed(2)} mm</p>
-                    <p>Y: {dims.y.toFixed(2)} mm</p>
-                    <p>Z: {dims.z.toFixed(2)} mm</p>
+                     <p>X: {dims.x?.toFixed(2) ?? "N/A"} mm</p>
+              <p>Y: {dims.y?.toFixed(2) ?? "N/A"} mm</p>
+              <p>Z: {dims.z?.toFixed(2) ?? "N/A"} mm</p>
                   </div>
                   <div>
-                    {fileState.volume_cc !== null && (
-                      <p className="mt-2 text-sm text-gray-700">
-                        Volume(cc):{" "}
-                        <span className="font-bold">{fileState.volume_cc.toFixed(3)} cm³</span>
-                      </p>
-                    )}
+                   {fileState.volume_cc !== null && fileState.volume_cc !== undefined && (
+  <p className="mt-2 text-sm text-gray-700">
+    Volume(cc):{" "}
+    <span className="font-bold">{fileState.volume_cc.toFixed(3)} cm³</span>
+  </p>
+)}
                   </div>
                 </div>
               ) : (
