@@ -1,6 +1,3 @@
-
-
-
 import React, { useState, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
 import CameraController from "./CameraController";
