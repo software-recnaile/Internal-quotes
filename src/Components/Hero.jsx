@@ -8,7 +8,7 @@ import FileUpload from "./FileUpload";
 import PartsPricingTable from "./PartsPricingTable"; // Import the table component
 // import StraightButton from "./StraightButton";
 // import DimensionsDisplay from "./DimensionsDisplay";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo-2.png";
 import "../App.css";
 import { GizmoHelper, GizmoViewport } from "@react-three/drei";
 
@@ -19,7 +19,12 @@ const Hero = () => {
   const [reorientedDimensions, setReorientedDimensions] = useState(null);  // Store reoriented dimensions
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [fileStates, setFileStates] = useState([]); // Add state for fileStates
+  const [fileStates, setFileStates] = useState([]); // State for fileStates
+  const [discount, setDiscount] = useState(""); // State for discount
+  const [paintingCost, setPaintingCost] = useState(""); // State for painting cost
+  const [companyName, setCompanyName] = useState(""); // State for company name
+  const [qrnCode, setQrnCode] = useState(""); // State for QRN code
+  const [packingOption, setPackingOption] = useState(""); // State for packing option
 
   const modelViewerRef = useRef();
 
@@ -46,12 +51,37 @@ const Hero = () => {
     setFileStates(states);
   };
 
+  // Callback to receive discount from FileUpload
+  const handleDiscountChange = (value) => {
+    setDiscount(value);
+  };
+
+  // Callback to receive painting cost from FileUpload
+  const handlePaintingCostChange = (value) => {
+    setPaintingCost(value);
+  };
+
+  // Callback to receive company name from FileUpload
+  const handleCompanyNameChange = (value) => {
+    setCompanyName(value);
+  };
+
+  // Callback to receive QRN code from FileUpload
+  const handleQrnCodeChange = (value) => {
+    setQrnCode(value);
+  };
+
+  // Callback to receive packing option from FileUpload
+  const handlePackingOptionChange = (value) => {
+    setPackingOption(value);
+  };
+
   return (
     <main className="bg-gray-900 w-screen h-screen overflow-x-hidden overflow-y-auto">
       <div className="flex items-center justify-between bg-gray-700 p-2 pb-3 rounded-t-xl">
         <div className="flex items-center">
           <img src={logo} alt="logo" className="w-16 h-16 sm:w-20 sm:h-20 mx-3 sm:mx-5" />
-          <h1 className="text-white text-xl sm:text-3xl font-bold">3D Model Properties</h1>
+          <h1 className="text-white text-xl sm:text-3xl font-bold">3DE INTERNAL QUOTATION</h1>
         </div>
       </div>
 
@@ -94,6 +124,11 @@ const Hero = () => {
           {modelData && fileStates.length > 0 && (
             <PartsPricingTable 
               fileStates={fileStates}
+              discount={discount}
+              paintingCost={paintingCost}
+              companyName={companyName}
+              qrnCode={qrnCode}
+              packingOption={packingOption}
             />
           )}
         </div>
@@ -103,7 +138,12 @@ const Hero = () => {
             onFileLoad={setModelData}
             onError={setError}
             onLoading={setLoading}
-            onFileStatesChange={handleFileStatesChange} // Add this prop
+            onFileStatesChange={handleFileStatesChange}
+            onDiscountChange={handleDiscountChange}
+            onPaintingCostChange={handlePaintingCostChange}
+            onCompanyNameChange={handleCompanyNameChange}
+            onQrnCodeChange={handleQrnCodeChange}
+            onPackingOptionChange={handlePackingOptionChange}
           />
           {/* <StraightButton onStraighten={handleStraighten} /> */}
           <ViewControls
